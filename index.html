@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreshCart | Online Grocery Store</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- LOGIN PAGE -->
+  <section id="loginPage" class="login-page">
+    <div class="login-card">
+      <div class="logo-big">🛒</div>
+      <h1>FreshCart</h1>
+      <p>Fresh groceries. Easy shopping.</p>
+      <form id="loginForm">
+        <label>Login As</label>
+        <div class="role-switch">
+          <button type="button" id="userRoleBtn" class="role-btn active" onclick="selectRole('user')">👤 User</button>
+          <button type="button" id="adminRoleBtn" class="role-btn" onclick="selectRole('admin')">🛠️ Admin</button>
+        </div>
+        <label>Email</label>
+        <input id="email" type="email" placeholder="Enter your email" required>
+        <label>Password</label>
+        <input id="password" type="password" placeholder="Enter password" minlength="4" required>
+        <button type="submit" class="primary-btn">Login</button>
+      </form>
+      <small id="loginHint">User demo: any valid email + 4+ character password.<br>Admin demo: admin@freshcart.com / admin123</small>
+    </div>
+  </section>
+
+  <!-- ADMIN DASHBOARD -->
+  <section id="adminPage" class="admin-page hidden">
+    <header class="admin-header">
+      <div class="brand">🛒 FreshCart <span>Admin</span></div>
+      <div class="admin-actions">
+        <button onclick="showStore()" class="secondary-btn">View Store</button>
+        <button onclick="logout()" class="logout-admin">Logout</button>
+      </div>
+    </header>
+    <main class="admin-main">
+      <div class="admin-title">
+        <div>
+          <span class="tag">ADMIN PANEL</span>
+          <h2>Dashboard</h2>
+          <p>Manage products and monitor your grocery store.</p>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><span>📦</span><div><strong id="adminProductCount">0</strong><small>Products</small></div></div>
+        <div class="stat-card"><span>🛒</span><div><strong id="adminCartCount">0</strong><small>Items in Demo Cart</small></div></div>
+        <div class="stat-card"><span>👥</span><div><strong id="adminUserCount">0</strong><small>Demo Users</small></div></div>
+        <div class="stat-card"><span>💰</span><div><strong id="adminCartValue">₹0</strong><small>Cart Value</small></div></div>
+      </div>
+
+      <section class="admin-card">
+        <div class="admin-card-heading">
+          <div><h3>➕ Add New Product</h3><p>Add products to the store catalog.</p></div>
+        </div>
+        <form id="addProductForm" class="product-form">
+          <input id="newName" placeholder="Product name" required>
+          <select id="newCategory" required>
+            <option>Fruits</option><option>Vegetables</option><option>Dairy</option>
+            <option>Bakery</option><option>Staples</option><option>Snacks</option><option>Beverages</option>
+          </select>
+          <input id="newPrice" type="number" min="1" placeholder="Price ₹" required>
+          <input id="newUnit" placeholder="Unit e.g. 1 kg" required>
+          <input id="newImg" type="url" placeholder="Image URL" required>
+          <button class="primary-btn" type="submit">Add Product</button>
+        </form>
+      </section>
+
+      <section class="admin-card">
+        <div class="admin-card-heading">
+          <div><h3>📦 Product Management</h3><p>View and remove products from the catalog.</p></div>
+        </div>
+        <div id="adminProductTable" class="admin-product-table"></div>
+      </section>
+    </main>
+  </section>
+
+  <!-- STORE -->
+  <div id="storePage" class="hidden">
+    <header class="header">
+      <nav class="nav">
+        <div class="brand" onclick="goHome()">🛒 FreshCart</div>
+        <div class="search-box">
+          <span>🔎</span>
+          <input id="searchInput" type="search" placeholder="Search for groceries...">
+        </div>
+        <div class="nav-links">
+          <button onclick="goHome()">Home</button>
+          <button onclick="shopNow()">Shop</button>
+          <button id="adminNavBtn" class="admin-nav-btn hidden" onclick="showAdmin()">🛠️ Admin</button>
+          <button class="cart-button" onclick="openCart()">🛍️ Cart <b id="cartCount">0</b></button>
+          <button onclick="logout()">Logout</button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-content">
+          <span class="tag">FRESH • FAST • AFFORDABLE</span>
+          <h2>Everything you need,<br><span>freshly delivered.</span></h2>
+          <p>Buy fruits, vegetables, dairy, bakery products, snacks, beverages and everyday essentials from one simple online store.</p>
+          <button class="primary-btn" onclick="shopNow()">Start Shopping →</button>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-circle">🧺</div>
+          <span>🍎</span><span>🥦</span><span>🥛</span><span>🍞</span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">
+          <h2>Shop by Category</h2>
+          <p>Choose what you need</p>
+        </div>
+        <div id="categoryGrid" class="category-grid"></div>
+      </section>
+
+      <section id="shopSection" class="section">
+        <div class="products-heading">
+          <div>
+            <h2>All Groceries</h2>
+            <p id="resultText">Browse our grocery collection</p>
+          </div>
+          <select id="sortSelect">
+            <option value="featured">Featured</option>
+            <option value="low">Price: Low to High</option>
+            <option value="high">Price: High to Low</option>
+            <option value="name">Name: A to Z</option>
+          </select>
+        </div>
+        <div id="productGrid" class="product-grid"></div>
+      </section>
+    </main>
+
+    <footer>
+      <div><h3>🛒 FreshCart</h3><p>Online Grocery Store — Front End Project</p></div>
+      <div><h3>Categories</h3><p>Fruits · Vegetables · Dairy · Bakery · Snacks</p></div>
+      <div><h3>Contact</h3><p>freshcart@example.com</p></div>
+    </footer>
+  </div>
+
+  <!-- CART MODAL -->
+  <div id="cartModal" class="modal hidden">
+    <div class="cart-modal">
+      <button class="close-btn" onclick="closeCart()">×</button>
+      <h2>🛍️ Your Cart</h2>
+      <div id="cartItems"></div>
+      <div class="total-row"><span>Total</span><strong id="cartTotal">₹0</strong></div>
+      <button class="primary-btn full" onclick="checkout()">Place Order</button>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>
